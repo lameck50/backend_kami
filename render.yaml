@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: kami-backend
+    runtime: node
+    branch: main
+    buildCommand: "npm install"
+    startCommand: "node index.js"
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "18" # Vous pouvez ajuster la version de Node si nécessaire
