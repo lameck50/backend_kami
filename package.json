@@ -1,0 +1,18 @@
+{
+  "name": "kami-geoloc-backend",
+  "version": "0.1.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^7.0.0",
+    "body-parser": "^1.20.2",
+    "socket.io": "^4.7.1",
+    "jsonwebtoken": "^9.0.0",
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "firebase-admin": "^11.11.1"
+  }
+}
