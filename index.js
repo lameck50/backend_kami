@@ -203,6 +203,7 @@ app.post('/api/auth/login', async (req, res) => {
     });
 
   } catch (error) {
+    console.error('---! ERREUR DE CONNEXION !---', error);
     res.status(500).json({ message: 'Erreur serveur lors de la connexion.' });
   }
 });
