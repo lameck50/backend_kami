@@ -23,6 +23,8 @@ const JWT_SECRET = process.env.JWT_SECRET || 'votre_super_secret_jwt';
 // MongoDB Connection
 const DB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/kami_geoloc'; // Use env var or fallback
 
+console.log('Tentative de connexion avec l\'URI:', DB_URI.replace(/:([^:]+)@/, ':<password>@'));
+
 mongoose.connect(DB_URI)
   .then(() => console.log('Connecté à MongoDB'))
   .catch(err => console.error('Erreur de connexion à MongoDB:', err));
