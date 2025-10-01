@@ -4,16 +4,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 const http = require('http'); // Import http module
-const admin = require('firebase-admin');
 
-// Initialize Firebase Admin SDK
-const serviceAccount = process.env.SERVICE_ACCOUNT_KEY_JSON
-  ? JSON.parse(process.env.SERVICE_ACCOUNT_KEY_JSON)
-  : require('./serviceAccountKey.json');
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+// Firebase Admin désactivé pour ce déploiement
 
 const app = express();
 const server = http.createServer(app); // Create HTTP server from Express app
@@ -29,7 +21,7 @@ const PORT = 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'votre_super_secret_jwt';
 
 // MongoDB Connection
-const DB_URI = 'mongodb://localhost:27017/kami_geoloc'; // Default URI
+const DB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/kami_geoloc'; // Use env var or fallback
 
 mongoose.connect(DB_URI)
   .then(() => console.log('Connecté à MongoDB'))
@@ -358,6 +350,14 @@ app.delete('/api/users/:id', authenticateToken, isAdmin, async (req, res) => {
   }
 });
 
+// --- Middleware for role checks ---
+const isSupervisorOrAdmin = (req, res, next) => {
+  if (req.user.role !== 'superviseur' && req.user.role !== 'admin') {
+    return res.status(403).json({ message: 'Accès refusé. Seuls les superviseurs ou admins peuvent effectuer cette action.' });
+  }
+  next();
+};
+
 // --- CRUD Routes for Geofences (Supervisor/Admin) ---
 
 // Create a new geofence
@@ -570,13 +570,7 @@ app.post('/api/fcm/register', authenticateToken, async (req, res) => {
   }
 });
 
-// --- Middleware for role checks ---
-const isSupervisorOrAdmin = (req, res, next) => {
-  if (req.user.role !== 'superviseur' && req.user.role !== 'admin') {
-    return res.status(403).json({ message: 'Accès refusé. Seuls les superviseurs ou admins peuvent effectuer cette action.' });
-  }
-  next();
-};
+
 
 // --- CRUD Routes for Missions ---
 
